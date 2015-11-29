@@ -42,7 +42,7 @@
         android:id="@+id/myRegisterLink"
         android:clickable="true"
         android:layout_width="wrap_content"
-        android:text="Register Here"
+        android:text="Register Here!!!"
         android:textStyle="bold"
         android:layout_gravity="center"
         android:layout_height="wrap_content" />

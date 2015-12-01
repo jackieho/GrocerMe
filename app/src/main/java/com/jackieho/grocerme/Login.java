@@ -16,6 +16,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     Button bLogin;
     EditText myUsername, myPass;
     TextView myRegisterLink;
+    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,21 +30,26 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         bLogin.setOnClickListener(this);
         myRegisterLink.setOnClickListener(this);
+
+        userLocalStore = new UserLocalStore(this);
     }
 
     @Override
     public void onClick(View v) {
 
-        switch(v.getId()) {
-            case R.id.bLogin:
-                break;
-            case R.id.myRegisterLink:
-                startActivity(new Intent(this, Register.class));
-                break;
-        }
-        /**
+//        switch(v.getId()) {
+//            case R.id.bLogin:
+//                break;
+//            case R.id.myRegisterLink:
+//                startActivity(new Intent(this, Register.class));
+//                break;
+//        }
+
         if (v.getId() == R.id.bLogin) {
 
+            User user = new User(null, null);
+            userLocalStore.storeUserData(user);
+            userLocalStore.setUserLoggedIn(true);
             startActivity(new Intent(this, MainActivity.class));
 
         }
@@ -52,7 +58,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             startActivity(new Intent(this, Register.class));
 
         }
-         */
 
     }
 

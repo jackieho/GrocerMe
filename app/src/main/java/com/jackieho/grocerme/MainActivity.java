@@ -16,6 +16,7 @@ import android.content.Intent;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button bLogout;
+    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +27,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         bLogout.setOnClickListener(this);
 
+        userLocalStore = new UserLocalStore(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (authenticate() == true) {
+            displayUserDetails();
+        }
+    }
+
+    private boolean authenticate() {
+        return userLocalStore.getLoggedInUser();
+    }
+
+    // change method here to display main page
+    private void displayUserDetails(){
+        User user = userLocalStore.getLoggedInUser();
+        // display stuff here
     }
 
     @Override
     public void onClick(View v) {
 
         if (v.getId() == R.id.bLogout) {
+            userLocalStore.clearUserData();
+            userLocalStore.setUserLoggedIn(false);
 
             startActivity(new Intent(this, Login.class));
 

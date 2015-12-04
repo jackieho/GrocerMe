@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.jackieho.grocerme.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="10dp"
     android:fitsSystemWindows="true"
-    tools:context="com.jackieho.grocerme.MainActivity">
+    android:orientation="vertical">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:text="Hello!"
+        android:layout_gravity="center_horizontal"
+        android:textSize="24dp"/>
 
+    <Button
+        android:id="@+id/bCouponList"
+        android:text="View Coupons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/bShoppingList"
+        android:text="View Shopping List"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/bAddItem"
+        android:text="Add item without coupons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/bLogout"
         android:text="Logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-</android.support.design.widget.CoordinatorLayout>
+</LinearLayout>

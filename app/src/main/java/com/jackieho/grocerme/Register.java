@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
+import java.text.TextUtils;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,6 +42,13 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             String name = myName.getText().toString();
             String username = myUsername.getText().toString();
             String password = myPass.getText().toString();
+            String confirm_password = myConfirmPass.getText().toString();
+
+            if (!name.isEmpty() && !username.isEmpty() && !password.isEmpty()
+                    && !confirm_password.isEmpty() && (password.equals(confirm_password))) {
+                User newUser = m
+
+            }
 
             User user = new User(name, username, password);
 

@@ -9,6 +9,8 @@ public class Coupon implements Serializable {
 
     // public static final String TAG = "User";
     public static final String TABLE_LIST = "List";
+
+    public long coupon_ID;
     public static final String KEY_item_name = "Item Name";
     public static final String KEY_description = "Description";
     public static final double KEY_item_price = "Item Price";

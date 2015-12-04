@@ -57,7 +57,7 @@ public class UserDatabase {
         Cursor cursor = mDatabase.query(User.TABLE_USER, mAllColumns,
                 User.KEY_id + " = " + insertId, null, null, null, null);
         cursor.moveToFirst();
-        User newUser = cursorToCompany(cursor);
+        User newUser = cursorToUser(cursor);
         cursor.close();
         return newUser;
     }
@@ -109,14 +109,14 @@ public class UserDatabase {
         return company;
     }
 
-    protected Company cursorToCompany(Cursor cursor) {
-        Company company = new Company();
-        company.setId(cursor.getLong(0));
-        company.setName(cursor.getString(1));
-        company.setAddress(cursor.getString(2));
-        company.setWebsite(cursor.getString(3));
-        company.setPhoneNumber(cursor.getString(4));
-        return company;
+    protected User cursorToUser(Cursor cursor) {
+        User user = new User();
+        user.setId(cursor.getLong(0));
+        user.setName(cursor.getString(1));
+        user.setAddress(cursor.getString(2));
+        user.setWebsite(cursor.getString(3));
+        user.setPhoneNumber(cursor.getString(4));
+        return user;
     }
 
 }

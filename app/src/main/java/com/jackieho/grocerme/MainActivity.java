@@ -1,20 +1,16 @@
 package com.jackieho.grocerme;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.content.Intent;
 
+/**
+ * Created by jackieho on 2015-12-03.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
     Button bLogout;
     UserLocalStore userLocalStore;
 
@@ -35,18 +31,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
 
         if (authenticate() == true) {
-            displayUserDetails();
+            displayMenu();
         }
     }
 
     private boolean authenticate() {
-        return userLocalStore.getLoggedInUser();
+        return userLocalStore.isUserLoggedIn();
     }
 
     // change method here to display main page
-    private void displayUserDetails(){
+    private void displayMenu (){
         User user = userLocalStore.getLoggedInUser();
-        // display stuff here
     }
 
     @Override
@@ -86,3 +81,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 */
 }
+

@@ -47,7 +47,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         if (v.getId() == R.id.bLogin) {
 
-            User user = new User(null, null);
+            User user = new User(null, null, null);
             userLocalStore.storeUserData(user);
             userLocalStore.setUserLoggedIn(true);
             startActivity(new Intent(this, MainActivity.class));

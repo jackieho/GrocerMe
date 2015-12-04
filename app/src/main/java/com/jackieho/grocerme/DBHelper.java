@@ -7,9 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by jackieho on 2015-12-03.
  */
-public class DBHelper extends SQLiteOpenHelper {
+public abstract class DBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "users.db";
+    private static final int DATABASE_VERSION = 1;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

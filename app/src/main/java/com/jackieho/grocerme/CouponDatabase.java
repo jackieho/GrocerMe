@@ -102,10 +102,11 @@ public class CouponDatabase {
     public static Coupon cursorToCoupon(Cursor cursor) {
         Coupon my_coupon = new Coupon();
         //my_coupon.setCouponId(cursor.getLong(0));
-        my_coupon.setItemName(cursor.getString(2));
-        my_coupon.setDescription(cursor.getString(3));
-        my_coupon.setItemPrice(cursor.getDouble(4));
         my_coupon.setAmount(cursor.getInt(5));
+        my_coupon.setItemName(cursor.getString(2));
+        my_coupon.setDescription(cursor.getString(4));
+        my_coupon.setItemPrice(cursor.getDouble(3));
+
 
         // get The company by id
         /*long userId = cursor.getLong(5);

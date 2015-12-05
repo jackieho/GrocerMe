@@ -10,7 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
-import java.text.TextUtils;
+import android.content.DialogInterface;
+import android.app.AlertDialog;
+import android.content.Context;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,15 +46,31 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             String password = myPass.getText().toString();
             String confirm_password = myConfirmPass.getText().toString();
 
-            if (!name.isEmpty() && !username.isEmpty() && !password.isEmpty()
-                    && !confirm_password.isEmpty() && (password.equals(confirm_password))) {
-                User newUser = m
+            if (name.isEmpty() || username.isEmpty() || password.isEmpty()
+                    || confirm_password.isEmpty() || !(password.equals(confirm_password))) {
+
+
+                new AlertDialog.Builder(this)
+                        .setTitle("Registration error")
+                        .setMessage("All fields must be filled and passwords must match.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // clear page
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
 
             }
+            else
+            {
+                UserDatabase my_database = new UserDatabase(this);
+                my_database.createUser(name, username, password);
 
-            User user = new User(name, username, password);
+                startActivity(new Intent(this, MainActivity.class));
+            }
 
-            startActivity(new Intent(this, MainActivity.class));
+
 
         }
 

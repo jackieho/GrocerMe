@@ -4,23 +4,20 @@
     tools:context="com.jackieho.grocerme.MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingTop="20dp"
     android:padding="10dp"
     android:fitsSystemWindows="true"
+    android:background="#c8fdff"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:text="Hello!"
+        android:text="GrocerMe"
         android:layout_gravity="center_horizontal"
-        android:textSize="24dp"/>
+        android:textSize="24dp"
+        android:textColor="#000" />
 
-    <Button
-        android:id="@+id/bCouponList"
-        android:text="View Coupons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/bShoppingList"
         android:text="View Shopping List"
@@ -28,7 +25,12 @@
         android:layout_height="wrap_content" />
     <Button
         android:id="@+id/bAddItem"
-        android:text="Add item without coupons"
+        android:text="Add Item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/bDelete"
+        android:text="Delete All Items From List"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <Button

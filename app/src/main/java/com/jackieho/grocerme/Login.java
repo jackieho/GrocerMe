@@ -1,10 +1,9 @@
 package com.jackieho.grocerme;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,10 +12,11 @@ import android.content.Intent;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
+    private DBHelper mDbHelper = new DBHelper(this);
+
     Button bLogin;
     EditText myUsername, myPass;
     TextView myRegisterLink;
-    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,33 +30,47 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         bLogin.setOnClickListener(this);
         myRegisterLink.setOnClickListener(this);
-
-        userLocalStore = new UserLocalStore(this);
     }
 
     @Override
     public void onClick(View v) {
 
-//        switch(v.getId()) {
-//            case R.id.bLogin:
-//                break;
-//            case R.id.myRegisterLink:
-//                startActivity(new Intent(this, Register.class));
-//                break;
-//        }
-
         if (v.getId() == R.id.bLogin) {
 
-            User user = new User(null, null, null);
-            userLocalStore.storeUserData(user);
-            userLocalStore.setUserLoggedIn(true);
-            startActivity(new Intent(this, MainActivity.class));
+            String username = myUsername.getText().toString();
+            String password = myPass.getText().toString();
+
+            if (username.isEmpty() || password.isEmpty()) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Login error")
+                        .setMessage("All fields must be filled.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+            else if (!(mDbHelper.inDatabase(User.TABLE_USER, username, password))) {
+                new AlertDialog.Builder(this)
+                        .setTitle("Login error")
+                        .setMessage("Username and/or password not found.")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+            else {
+                Register.currentUsername = username;
+                startActivity(new Intent(this, MainActivity.class));
+            }
 
         }
         else if (v.getId() == R.id.myRegisterLink) {
-
             startActivity(new Intent(this, Register.class));
-
         }
 
     }

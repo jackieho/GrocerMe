@@ -1,22 +1,18 @@
 package com.jackieho.grocerme;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.app.AlertDialog;
-import android.content.Context;
 
 public class Register extends AppCompatActivity implements View.OnClickListener {
+
+    public static String currentUsername = "";
+    private DBHelper mDbHelper = new DBHelper(this);
 
     Button bRegister;
     EditText myName, myUsername, myPass, myConfirmPass;
@@ -54,20 +50,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                         .setMessage("All fields must be filled and passwords must match.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // clear page
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
-            else if (checkDupl("users", username)) {
+            else if (mDbHelper.checkDupl(User.TABLE_USER, username)) {
 
                 new AlertDialog.Builder(this)
                         .setTitle("Registration Error")
                         .setMessage("The selected username is already taken.")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                // clear page
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -78,24 +72,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                 UserDatabase my_database = new UserDatabase(this);
                 my_database.createUser(name, username, password);
 
+                currentUsername = username;
+
                 startActivity(new Intent(this, MainActivity.class));
             }
         }
-    }
-
-    public boolean checkDupl(String table_name, String username) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        String query = "SELECT * FROM " + table_name + " WHERE Username = " + username;
-
-        Cursor cursor = db.query(query, null);
-
-        if (cursor != null)
-        {
-            // there is a duplicate
-            return true;
-        }
-        return false;
     }
 
 }

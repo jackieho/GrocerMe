@@ -7,17 +7,17 @@ import java.io.Serializable;
  */
 public class User implements Serializable {
 
-    public static final String TAG = "User";
-
     public static final String TABLE_USER = "User";
-    public static final String KEY_id = "id";
-    public static final String KEY_name = "name";
-    public static final String KEY_username = "username";
+    public static final String KEY_id = "User_ID";
+    public static final String KEY_name = "Name";
+    public static final String KEY_username = "Username";
+    public static final String KEY_password = "Password";
 
-    // encrypt it?
-    public static final String KEY_password = "password";
-
+    private long user_ID;
     public String name, username, password;
+
+    public User() {
+    }
 
     public User(String name, String username, String password) {
         this.name = name;
@@ -25,5 +25,35 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    // get and set methods
+    public long getUserId() {
+        return user_ID;
+    }
+
+    public void setUserId(long user_ID) {
+        this.user_ID = user_ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

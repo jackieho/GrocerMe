@@ -5,10 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.util.Log;
@@ -18,7 +15,7 @@ import android.util.Log;
  */
 public class UserDatabase {
 
-    public static final String TAG = "CompanyDAO";
+    public static final String TAG = "UserDatabase";
 
     // Database fields
     private SQLiteDatabase mDatabase;
@@ -47,47 +44,28 @@ public class UserDatabase {
         mDbHelper.close();
     }
 
-    public User createUser(String name, String username, String password) {
+    public boolean createUser(String name, String username, String password) {
         ContentValues values = new ContentValues();
         values.put(User.KEY_name, name);
         values.put(User.KEY_username, username);
         values.put(User.KEY_password, password);
-        long insertId = mDatabase
-                .insert(User.TABLE_USER, null, values);
+        long insertId = mDatabase.insert(User.TABLE_USER, null, values);
+        if(insertId == -1)
+            return false;
+        else
+            return true;
+    }
+
+    public List<User> getAllUsers() {
+        List<User> listCompanies = new ArrayList<User>();
+
         Cursor cursor = mDatabase.query(User.TABLE_USER, mAllColumns,
-                User.KEY_id + " = " + insertId, null, null, null, null);
-        cursor.moveToFirst();
-        User newUser = cursorToUser(cursor);
-        cursor.close();
-        return newUser;
-    }
-
-    public void deleteUser(User user) {
-        long id = User.KEY_id.getId();
-        // delete all employees of this company
-        UserDatabase currentUser = new UserDatabase(mContext);
-        List<User> listUsers = currentUser.getCoupons(id);
-        if (listUsers != null && !listUsers.isEmpty()) {
-            for (User e : listUsers) {
-                currentUser.deleteUser(e);
-            }
-        }
-
-        System.out.println("the deleted user has the id: " + id);
-        mDatabase.delete(User.TABLE_USERS, User.KEY_id
-                + " = " + id, null);
-    }
-
-    public List<Company> getAllCompanies() {
-        List<Company> listCompanies = new ArrayList<Company>();
-
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_COMPANIES, mAllColumns,
                 null, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                Company company = cursorToCompany(cursor);
-                listCompanies.add(company);
+                User my_user = cursorToUser(cursor);
+                listCompanies.add(my_user);
                 cursor.moveToNext();
             }
 
@@ -97,25 +75,24 @@ public class UserDatabase {
         return listCompanies;
     }
 
-    public Company getCompanyById(long id) {
-        Cursor cursor = mDatabase.query(DBHelper.TABLE_COMPANIES, mAllColumns,
-                DBHelper.COLUMN_COMPANY_ID + " = ?",
+    public User getUserById(long id) {
+        Cursor cursor = mDatabase.query(User.TABLE_USER, mAllColumns,
+                User.KEY_id + " = ?",
                 new String[] { String.valueOf(id) }, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
 
-        Company company = cursorToCompany(cursor);
-        return company;
+        User user = cursorToUser(cursor);
+        return user;
     }
 
     protected User cursorToUser(Cursor cursor) {
         User user = new User();
-        user.setId(cursor.getLong(0));
+        user.setUserId(cursor.getLong(0));
         user.setName(cursor.getString(1));
-        user.setAddress(cursor.getString(2));
-        user.setWebsite(cursor.getString(3));
-        user.setPhoneNumber(cursor.getString(4));
+        user.setUsername(cursor.getString(2));
+        user.setPassword(cursor.getString(3));
         return user;
     }
 

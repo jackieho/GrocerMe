@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ddffc8"
+    android:background="#c8fdff"
     android:paddingTop="150dp"
     android:paddingLeft="100dp"
     android:paddingRight="100dp"
@@ -16,7 +16,7 @@
         android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:textSize="40dp"
+        android:textSize="30dp"
         android:textColor="#0066f4" />
 
     <Button

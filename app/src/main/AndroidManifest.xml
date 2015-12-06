@@ -29,6 +29,14 @@
         <activity
             android:name=".Register"
             android:label="@string/title_activity_register"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddItem"
+            android:label="@string/title_activity_add_coupon"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ShoppingList"
+            android:label="Shopping List"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

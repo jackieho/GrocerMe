@@ -1,19 +1,14 @@
 package com.jackieho.grocerme;
 
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.view.Menu;
 import android.view.Gravity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import java.util.List;
 import android.graphics.Color;
 
@@ -38,11 +33,6 @@ public class ShoppingList extends AppCompatActivity implements View.OnClickListe
 
         TableLayout myTable = (TableLayout) findViewById(R.id.ListTable);
 
-        // SHOULD BE SIZE OF DATABASE, NUMBER OF COUPONS
-
-        // int numberRows = mDbHelper.numberOfRows();
-
-        // user ID
         List<Coupon> allCoupons = mDbHelper.getCouponsOfUser(Coupon.TABLE_LIST, Register.currentUsername);
 
         double total = 0.0;
@@ -71,7 +61,6 @@ public class ShoppingList extends AppCompatActivity implements View.OnClickListe
 
             TextView list_price = new TextView(this);
             list_price.setText(Double.toString(allCoupons.get(i).getItemPrice()));
-            //list_price.setText(String.format("#.2f",allCoupons.get(i).getItemPrice()));
             list_price.setTypeface(Typeface.SERIF);
             list_price.setTextColor(Color.BLACK);
             list_price.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -99,7 +88,9 @@ public class ShoppingList extends AppCompatActivity implements View.OnClickListe
         params.span = 3;
 
         TextView DisplayTotal = new TextView(this);
-        DisplayTotal.setText(Double.toString(total));
+        double number = Math.round(total * 100);
+        number = number/100;
+        DisplayTotal.setText(Double.toString(number));
         DisplayTotal.setTextSize(18);
         DisplayTotal.setGravity(Gravity.CENTER_HORIZONTAL);
         DisplayTotal.setTextColor(Color.BLACK);

@@ -1,202 +1,122 @@
 package com.jackieho.grocerme;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.view.Menu;
+import android.view.Gravity;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import java.util.List;
+import android.graphics.Color;
+
 
 /**
  * Created by jackieho on 2015-12-03.
  */
 
-public abstract class ShoppingList extends AppCompatActivity implements View.OnClickListener {
+public class ShoppingList extends AppCompatActivity implements View.OnClickListener {
 
-    public static final String KEY_amount = "amount";
-    public static final String KEY_item = "item";
-    public static final String KEY_coupon = "coupon";
-    public static final String KEY_couponDescription = "couponDescription";
-    public static final String KEY_price = "price";
+    private DBHelper mDbHelper = new DBHelper(this);
+
+    TextView bReturn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // comment out next line
         setContentView(R.layout.shopping_list_table);
 
-        TableLayout table = new TableLayout(this);
+        bReturn = (TextView) findViewById(R.id.bReturn);
+        bReturn.setOnClickListener(this);
 
-        table.setStretchAllColumns(true);
-        table.setShrinkAllColumns(true);
-
-        TableRow rowTitle = new TableRow(this);
-        rowTitle.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        TableRow rowDayLabels = new TableRow(this);
-        TableRow rowHighs = new TableRow(this);
-        TableRow rowLows = new TableRow(this);
-        TableRow rowConditions = new TableRow(this);
-        rowConditions.setGravity(Gravity.CENTER);
-
-        TextView empty = new TextView(this);
-
-        // title column/row
-        TextView title = new TextView(this);
-        title.setText("Java Weather Table");
-
-        title.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-        title.setGravity(Gravity.CENTER);
-        title.setTypeface(Typeface.SERIF, Typeface.BOLD);
-
-        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        TableLayout myTable = (TableLayout) findViewById(R.id.ListTable);
 
         // SHOULD BE SIZE OF DATABASE, NUMBER OF COUPONS
-        params.span = 6;
 
-        rowTitle.addView(title, params);
+        // int numberRows = mDbHelper.numberOfRows();
 
-        // labels column
-        TextView highsLabel = new TextView(this);
-        highsLabel.setText("Day High");
-        highsLabel.setTypeface(Typeface.DEFAULT_BOLD);
+        // user ID
+        List<Coupon> allCoupons = mDbHelper.getCouponsOfUser(Coupon.TABLE_LIST, Register.currentUsername);
 
-        TextView lowsLabel = new TextView(this);
-        lowsLabel.setText("Day Low");
-        lowsLabel.setTypeface(Typeface.DEFAULT_BOLD);
+        double total = 0.0;
 
-        TextView conditionsLabel = new TextView(this);
-        conditionsLabel.setText("Conditions");
-        conditionsLabel.setTypeface(Typeface.DEFAULT_BOLD);
+        for(int i = 0; i < allCoupons.size(); i++) {
 
-        rowDayLabels.addView(empty);
-        rowHighs.addView(highsLabel);
-        rowLows.addView(lowsLabel);
-        rowConditions.addView(conditionsLabel);
+            TableRow items = new TableRow(this);
 
-        // day 1 column
-        TextView day1Label = new TextView(this);
-        day1Label.setText("Feb 7");
-        day1Label.setTypeface(Typeface.SERIF, Typeface.BOLD);
+            TextView list_amount = new TextView(this);
+            list_amount.setText(Integer.toString(allCoupons.get(i).getAmount()));
+            list_amount.setTextColor(Color.BLACK);
+            list_amount.setGravity(Gravity.CENTER_HORIZONTAL);
+            list_amount.setTextSize(14);
 
-        TextView day1High = new TextView(this);
-        day1High.setText("28°F");
-        day1High.setGravity(Gravity.CENTER_HORIZONTAL);
+            TextView list_item = new TextView(this);
+            list_item.setText(allCoupons.get(i).getItemName());
+            list_item.setTypeface(Typeface.SERIF);
+            list_item.setTextColor(Color.BLACK);
+            list_item.setTextSize(14);
 
-        TextView day1Low = new TextView(this);
-        day1Low.setText("15°F");
-        day1Low.setGravity(Gravity.CENTER_HORIZONTAL);
+            TextView list_description = new TextView(this);
+            list_description.setText(allCoupons.get(i).getDescription());
+            list_description.setTypeface(Typeface.SERIF);
+            list_description.setTextColor(Color.BLACK);
+            list_description.setTextSize(14);
 
-        ImageView day1Conditions = new ImageView(this);
-        day1Conditions.setImageResource(R.drawable.hot);
+            TextView list_price = new TextView(this);
+            list_price.setText(Double.toString(allCoupons.get(i).getItemPrice()));
+            //list_price.setText(String.format("#.2f",allCoupons.get(i).getItemPrice()));
+            list_price.setTypeface(Typeface.SERIF);
+            list_price.setTextColor(Color.BLACK);
+            list_price.setGravity(Gravity.CENTER_HORIZONTAL);
+            list_price.setTextSize(14);
 
-        rowDayLabels.addView(day1Label);
-        rowHighs.addView(day1High);
-        rowLows.addView(day1Low);
-        rowConditions.addView(day1Conditions);
+            items.addView(list_amount);
+            items.addView(list_item);
+            items.addView(list_description);
+            items.addView(list_price);
 
-        // day2 column
-        TextView day2Label = new TextView(this);
-        day2Label.setText("Feb 8");
-        day2Label.setTypeface(Typeface.SERIF, Typeface.BOLD);
+            myTable.addView(items);
 
-        TextView day2High = new TextView(this);
-        day2High.setText("26°F");
-        day2High.setGravity(Gravity.CENTER_HORIZONTAL);
+            total += allCoupons.get(i).getItemPrice() * allCoupons.get(i).getAmount();
 
-        TextView day2Low = new TextView(this);
-        day2Low.setText("14°F");
-        day2Low.setGravity(Gravity.CENTER_HORIZONTAL);
+        }
 
-        ImageView day2Conditions = new ImageView(this);
-        day2Conditions.setImageResource(R.drawable.pt_cloud);
+        TableRow rowTotal= new TableRow(this);
 
-        rowDayLabels.addView(day2Label);
-        rowHighs.addView(day2High);
-        rowLows.addView(day2Low);
-        rowConditions.addView(day2Conditions);
+        TextView labelTotal = new TextView(this);
+        labelTotal.setText("Total");
+        labelTotal.setTextSize(18);
+        labelTotal.setTextColor(Color.BLACK);
+        labelTotal.setPadding(10, 0, 0, 0);
+        TableRow.LayoutParams params = new TableRow.LayoutParams();
+        params.span = 3;
 
-        // day3 column
-        TextView day3Label = new TextView(this);
-        day3Label.setText("Feb 9");
-        day3Label.setTypeface(Typeface.SERIF, Typeface.BOLD);
+        TextView DisplayTotal = new TextView(this);
+        DisplayTotal.setText(Double.toString(total));
+        DisplayTotal.setTextSize(18);
+        DisplayTotal.setGravity(Gravity.CENTER_HORIZONTAL);
+        DisplayTotal.setTextColor(Color.BLACK);
 
-        TextView day3High = new TextView(this);
-        day3High.setText("23°F");
-        day3High.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        TextView day3Low = new TextView(this);
-        day3Low.setText("3°F");
-        day3Low.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        ImageView day3Conditions = new ImageView(this);
-        day3Conditions.setImageResource(R.drawable.snow);
-
-        rowDayLabels.addView(day3Label);
-        rowHighs.addView(day3High);
-        rowLows.addView(day3Low);
-        rowConditions.addView(day3Conditions);
-
-        // day4 column
-        TextView day4Label = new TextView(this);
-        day4Label.setText("Feb 10");
-        day4Label.setTypeface(Typeface.SERIF, Typeface.BOLD);
-
-        TextView day4High = new TextView(this);
-        day4High.setText("17°F");
-        day4High.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        TextView day4Low = new TextView(this);
-        day4Low.setText("5°F");
-        day4Low.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        ImageView day4Conditions = new ImageView(this);
-        day4Conditions.setImageResource(R.drawable.lt_snow);
-
-        rowDayLabels.addView(day4Label);
-        rowHighs.addView(day4High);
-        rowLows.addView(day4Low);
-        rowConditions.addView(day4Conditions);
-
-        // day5 column
-        TextView day5Label = new TextView(this);
-        day5Label.setText("Feb 11");
-        day5Label.setTypeface(Typeface.SERIF, Typeface.BOLD);
-
-        TextView day5High = new TextView(this);
-        day5High.setText("19°F");
-        day5High.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        TextView day5Low = new TextView(this);
-        day5Low.setText("6°F");
-        day5Low.setGravity(Gravity.CENTER_HORIZONTAL);
-
-        ImageView day5Conditions = new ImageView(this);
-        day5Conditions.setImageResource(R.drawable.pt_sun);
-
-        rowDayLabels.addView(day5Label);
-        rowHighs.addView(day5High);
-        rowLows.addView(day5Low);
-        rowConditions.addView(day5Conditions);
-
-        table.addView(rowTitle);
-        table.addView(rowDayLabels);
-        table.addView(rowHighs);
-        table.addView(rowLows);
-        table.addView(rowConditions);
-
-        setContentView(table);
+        rowTotal.addView(labelTotal, params);
+        rowTotal.addView(DisplayTotal);
+        myTable.addView(rowTotal);
 
     }
 
-}
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.bReturn) {
 
-    // public ShoppingList(String name, String username, String password) {
+            startActivity(new Intent(this, MainActivity.class));
 
-    // }
-//
-//    public User (String name, String username, String password) {
-//        this.name = name;
-//        this.username = username;
-//        this.password = password;
+        }
+    }
 }
 
